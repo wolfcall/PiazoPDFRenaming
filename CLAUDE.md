@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a minimal Python project called "PiazoPDFProcessor" that currently contains only a basic main.py file with a simple entry point structure. The project appears to be in its initial stages with just a skeleton implementation.
+This project is intended to take uncompressed zip files from paizo and rename the files inside to be more descriptive.
 
 ## Commands
 
@@ -12,7 +12,7 @@ This is a minimal Python project called "PiazoPDFProcessor" that currently conta
 ```bash
 python main.py <file1>
 ```
-The main script expects one command-line argument (file1) but currently doesn't process it.
+The main script expects one command-line argument which holds the location of the zip files and finds any paizo files to rename
 
 ### Development Commands
 Since this is a minimal Python project without dependencies or configuration files, standard Python commands apply:
@@ -23,12 +23,19 @@ Since this is a minimal Python project without dependencies or configuration fil
 ## Architecture
 
 ### Current Structure
-- `main.py` - Entry point with basic argument handling structure
-  - Contains a `main()` function that accepts one command-line argument
-  - Currently incomplete implementation (returns 0 without processing)
+- `main.py` - Entry point with directory traversal and PDF processing logic
+  - `main()` - Entry point that validates directory input and calls directorySearch
+  - `directorySearch(dirPath)` - Recursively traverses directories looking for PDF files
+  - `processPDF(dirPath, item)` - Processes PDF files matching Paizo naming patterns
+
+### Implementation Details
+- Uses regex patterns to identify Paizo PDF files (format: `PZO[0-9A-Z]{3,6}[ -]{0,1}.*`)
+- Recursively searches through directory structures using `os.listdir()`
+- Currently in development phase - prints analysis output but doesn't perform actual file renaming yet
+- Extracts Paizo product codes and analyzes directory naming patterns
 
 ### Key Points
-- The project name suggests PDF processing functionality, but no PDF-related code exists yet
 - The code structure follows standard Python conventions with `if __name__ == "__main__"` pattern
+- Uses standard library modules: `os`, `sys`, `re`
 - No external dependencies, configuration files, or package structure present
 - No tests, documentation, or build configuration detected
