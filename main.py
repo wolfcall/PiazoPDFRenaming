@@ -51,8 +51,6 @@ def processPDF(dirPath, item):
 
     new_title = title_pre + title_suf
     os.rename((dirPath+"\\"+item).replace("\\", "/"), (dirPath+"\\"+new_title).replace("\\", "/"))
-
-    print()
     return
 
 def filterFunc (x):
