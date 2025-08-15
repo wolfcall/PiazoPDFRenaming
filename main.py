@@ -1,10 +1,14 @@
 import os
 import sys
 import re
+import winreg
+
+nonPdfExtensions = []
+keywordsToIgnore = ["Card, Deck"]
 
 def main():
     # print(sys.argv)
-    if is_long_path_support_enabled():
+    if not is_long_path_support_enabled():
         print("Long path support is required please enable")
         return
 
@@ -16,7 +20,12 @@ def main():
         # print("Invalid input")
         return 1
 
+    print("Here is the list of unprocessed extensions:")
+    for item in nonPdfExtensions:
+        print(item)
+
     return 0
+
 
 def directorySearch(dirPath):
     for itempath in os.listdir(dirPath):
@@ -29,7 +38,9 @@ def directorySearch(dirPath):
             processPDF(dirPath, itempath)
         else:
             # print(f"Not a pdf: {itempath}")
-            return
+
+            if name[1] not in nonPdfExtensions:
+                nonPdfExtensions.append(name[1])
 
 
 def processPDF(dirPath, item):
@@ -40,6 +51,7 @@ def processPDF(dirPath, item):
         return
 
     regex = r"PZO[0-9A-Z]{3,6}"
+    # print(re.sub(regex, '', item))
     title_suf = re.sub(regex, '', item).replace(' ', '_')
     dir = dirPath.split("\\")[-1]
 
@@ -50,13 +62,15 @@ def processPDF(dirPath, item):
     title_pre = '_'.join(str_list)
 
     new_title = title_pre + title_suf
-    os.rename((dirPath+"\\"+item).replace("\\", "/"), (dirPath+"\\"+new_title).replace("\\", "/"))
+    # os.rename((dirPath + "\\" + item).replace("\\", "/"), (dirPath + "\\" + new_title).replace("\\", "/"))
     return
 
-def filterFunc (x):
+
+def filterFunc(x):
     if x in ['', "PDF", None]:
         return False
     return True
+
 
 def is_long_path_support_enabled():
     """
